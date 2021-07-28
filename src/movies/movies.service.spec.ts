@@ -41,7 +41,7 @@ describe('MoviesService', () => {
       expect(service.getOneMovie(EXISTING_ID)).toBeDefined();
     });
 
-    it('should return an Error', () => {
+    it('should return an Error of NotFoundException', () => {
       try {
         service.getOneMovie(NOT_EXISTING_ID);
       } catch (error) {
@@ -71,9 +71,27 @@ describe('MoviesService', () => {
       expect(afterDeleteLength).toBeLessThan(beforeDeleteLength);
     });
 
-    it('should return an Error', () => {
+    it('should return an Error of NotFoundException', () => {
       try {
         service.deleteMovie(NOT_EXISTING_ID);
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
+    });
+  });
+
+  describe('updateMovie', () => {
+    it('should update a Movie', () => {
+      createMovieForTesting(service);
+
+      service.updateMovie(EXISTING_ID, { title: 'updated title' });
+
+      expect(service.getOneMovie(EXISTING_ID).title).toEqual('updated title');
+    });
+
+    it('should return an Error of NotFoundException', () => {
+      try {
+        service.updateMovie(NOT_EXISTING_ID, {});
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
       }
