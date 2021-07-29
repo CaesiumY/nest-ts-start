@@ -21,4 +21,29 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  describe('/movies', () => {
+    it('GET', () => {
+      return request(app.getHttpServer())
+        .get('/movies')
+        .expect(200)
+        .expect('[]');
+    });
+
+    it('POST', () => {
+      const sampleMovie = {
+        title: 'test',
+        year: 2021,
+        genres: ['test1'],
+      };
+      return request(app.getHttpServer())
+        .post('/movies')
+        .send(sampleMovie)
+        .expect(201);
+    });
+
+    it('DELETE', () => {
+      return request(app.getHttpServer()).delete('/movies').expect(404);
+    });
+  });
 });
